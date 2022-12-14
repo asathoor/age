@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta description="Calculate the exact age of a person in years, months and days.">
+  <meta tags="age, calculate">
+  <title>Document</title>
+  <style>
+    body {
+      font-family: Helvetica, Arial, sans-serif;
+      padding: 10%;
+      color: #fff;
+    }
+    input, #result {
+      font-size: 1.2345rem;
+    }
+    main {
+       border: 10px solid #50a828;
+       padding-top: 2ch;
+       padding-bottom: 2ch;
+       text-align: center;
+       background-color: #2850a8;
+    }
+    label {
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <main>
+      <h1>Calculate Age</h1>
+
+     <div class="age-calculator">
+      <div class="controls">
+        <label for="date">Birthday: </label>
+        <input type="date" id="date">
+        <button id="calculate">Calculate Age</button> <br>
+      </div>
+      <p class="result">Will return the exact age of a person in Years, Months and Days.</p>
+    </div>
+  </main>
+  <script>
+    // selecting the elements
+  var date = document.getElementById('date');
+  var calculate = document.getElementById('calculate');
+  var result = document.querySelector('.result');
+
+  // set maximum date to today
+  date.max = new Date().toISOString().split('T')[0];
+
+  function calculateAge() {
+    var today = new Date();
+    var birthDate = new Date(date.value);
+
+    // Calculate years
+    var years;
+    if (today.getMonth() > birthDate.getMonth() || (today.getMonth() == birthDate.getMonth() && today.getDate() >= birthDate.getDate())) {
+      years = today.getFullYear() - birthDate.getFullYear();
+    }
+    else {
+      years = today.getFullYear() - birthDate.getFullYear() - 1;
+    }
+
+    // Calculate months
+    var months;
+    if (today.getDate() >= birthDate.getDate()) {
+      months = today.getMonth() - birthDate.getMonth();
+    }
+    else if (today.getDate() < birthDate.getDate()) {
+      months = today.getMonth() - birthDate.getMonth() - 1;
+    }
+    // make month positive
+    months = months < 0 ? months + 12 : months;
+
+    // Calculate days
+    var days;
+    // days of months in a year
+    var monthDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    if (today.getDate() >= birthDate.getDate()) {
+      days = today.getDate() - birthDate.getDate();
+    } else {
+      days = today.getDate() - birthDate.getDate() + monthDays[birthDate.getMonth()];
+    }
+
+    // Display result
+    result.innerHTML = `<p class="birthdate">Day of birth: ${birthDate.toDateString()}.</p>`;
+    result.innerHTML += `<p class="age">Age: ${years} years, ${months} months and ${days} days old.</p>`;
+    if (months == 0 && days == 0) {
+      result.innerHTML += `<p class="wishing">Birthday is today.</p>`;
+    }
+  }
+  calculate.addEventListener('click', calculateAge);
+
+  // run calculate on enter key
+  document.addEventListener('keypress', (e) => {
+    if (e.keyCode == 13) {
+      calculate.click();
+    }
+  });
+  // onload focus on date input
+  date.focus();
+  </script>
+</body>
+</html>
